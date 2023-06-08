@@ -1,0 +1,10 @@
+"""
+Module for storing the endpoints for the API.
+"""
+BASE_URL = "http://127.0.0.1:7000"
+BASE_URL = "http://winter.caltech.edu:82"
+PING_URL = BASE_URL + "/ping"
+USER_URL = BASE_URL + "/validation/user"
+PROGRAM_URL = BASE_URL + "/validation/program"
+WINTER_TOO_URL = BASE_URL + "/too/winter"
+SUMMER_TOO_URL = BASE_URL + "/too/summer"
