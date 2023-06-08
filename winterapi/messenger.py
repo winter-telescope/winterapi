@@ -263,7 +263,7 @@ class WinterAPI:
             url=url,
             data=data,
             program_name=program_name,
-            program_api_key=program.prog_api_key,
+            program_api_key=program.prog_key,
             submit_trigger=submit_trigger,
         )
 
