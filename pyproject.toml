@@ -38,7 +38,7 @@ dependencies = [
     "jupyter",
     "backoff",
     "pydantic",
-    "wintertoo"
+    "wintertoo>=0.3.6"
 ]
 
 [project.urls]
