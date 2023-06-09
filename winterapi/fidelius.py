@@ -150,7 +150,10 @@ class Fidelius:
         :return: Program details.
         """
         if program_name not in self.credentials.programs:
-            err = f"Program {program_name} not found in {self.credentials.programs}"
+            err = (
+                f"Program {program_name} not found in"
+                f" {list(self.credentials.programs)}"
+            )
             logger.error(err)
             raise KeyError(err)
         return self.credentials.programs[program_name]
