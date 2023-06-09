@@ -194,10 +194,10 @@ class WinterAPI:
         :return: None
         """
         if program_name is None:
-            program_name = input("Enter user: ")
+            program_name = input("Enter program: ")
         if program_api_key is None:
             program_api_key = getpass.getpass(
-                f"Enter password for user {program_name}: "
+                f"Enter password for program {program_name}: "
             )
 
         res = self.check_program_details(
