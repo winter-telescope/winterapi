@@ -28,9 +28,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install poetry
-        run: pipx install poetry
-
       # Set up the python versions
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
@@ -47,7 +44,9 @@ jobs:
       - name: Set up keyring
         run: |
           sudo apt-get update
-          sudo apt-get install -y kwalletmanager
+          sudo apt-get install -y kwalletmanager libdbus-glib-1-dev libdbus-1-dev
+          pip install dbus-python
+          pip install keyrings.alt
 
       - name: Run tests
         env:
