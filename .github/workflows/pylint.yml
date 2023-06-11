@@ -14,13 +14,13 @@ jobs:
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
-          cache: "poetry"
+          python-version: 3.11
+          cache: 'pip'
+          cache-dependency-path: pyproject.toml
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          python -m pip install --upgrade poetry
-          poetry install
+          pip install -e .
       - name: Analysing the code with pylint
         run: |
-           poetry run pylint wintertoo --fail-under=10.00
+           pylint winterapi --fail-under=10.00
