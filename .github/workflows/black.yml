@@ -22,4 +22,4 @@ jobs:
           pip install -e .
       - name: Reformat the code with black
         run: |
-          poetry run black . --check
+          black . --check
