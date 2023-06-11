@@ -44,6 +44,11 @@ jobs:
           pip install -e .
 
       - name: Run tests
+        env:
+          WINTER_API_USER: ${{ secrets.WINTER_API_USER }}
+          WINTER_API_PASSWORD: ${{ secrets.WINTER_API_PASSWORD }}
+          WINTER_API_PROGRAM: ${{ secrets.WINTER_API_PROGRAM }}
+          WINTER_API_KEY: ${{ secrets.WINTER_API_KEY }}
         run: coverage run -m unittest discover tests
 
       - name: Run Coveralls
