@@ -62,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Echo tag name
-        run: echo "Tag is ${{ github.ref }}, Tagged is ${{ startsWith(github.ref, 'refs/tags/')}}, Python Check is ${{matrix.python-version == 3.9}},  Deploy is ${{ startsWith(github.ref, 'refs/tags/') && matrix.python-version == 3.9}}"
+        run: echo "Tag is ${{ github.ref }}, Tagged is ${{ startsWith(github.ref, 'refs/tags/')}}, Python Check is ${{matrix.python-version == 3.11}},  Deploy is ${{ startsWith(github.ref, 'refs/tags/') && matrix.python-version == 3.9}}"
 
       - name: Install pypa/build
         run: >-
@@ -80,7 +80,7 @@ jobs:
           .
 
       - name: Publish distribution 📦 to PyPI
-        if: ${{ startsWith(github.ref, 'refs/tags/') && success() && matrix.python-version == 3.9 && github.event_name == 'push'}}
+        if: ${{ startsWith(github.ref, 'refs/tags/') && success() && matrix.python-version == 3.11 && github.event_name == 'push'}}
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
