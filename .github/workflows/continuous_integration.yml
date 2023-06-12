@@ -27,10 +27,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
-<<<<<<< HEAD
-=======
 
->>>>>>> 948573a (Try again)
       # Set up the python versions
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
