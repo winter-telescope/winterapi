@@ -16,4 +16,5 @@ pip install winterapi
 git clone git@github.com:winter-telescope/winterapi.git
 cd winterapi
 pip install --editable ".[dev]"
+pre-commit install
 ```
