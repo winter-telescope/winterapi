@@ -41,7 +41,7 @@ jobs:
 
       - name: install packages
         run: |
-          pip install -e .
+          pip install --editable ".[dev]"
 
       # Set up keyring
       - name: Set up keyring

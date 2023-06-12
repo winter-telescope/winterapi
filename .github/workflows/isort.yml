@@ -16,6 +16,6 @@ jobs:
     - name: Install dependencies
       run: |
         pip install --upgrade pip
-        pip install -e .
+        pip install --editable ".[dev]"
     - name: isort
       uses: isort/isort-action@v1.0.0
