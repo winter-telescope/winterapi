@@ -59,7 +59,7 @@ class TestSchedule(unittest.TestCase):
         )
 
         # Uncomment to update the schedule
-        local_schedule.to_csv(test_schedule_path, index=False)
+        # local_schedule.to_csv(test_schedule_path, index=False)
 
         pd.testing.assert_frame_equal(test_df, local_schedule, check_like=True)
 
