@@ -72,8 +72,6 @@ class TestSchedule(unittest.TestCase):
         api_schedule.reset_index(inplace=True)
         api_schedule.drop(columns=["index"], inplace=True)
 
-        print(api_schedule['progID'])
-        print(local_schedule['progID'])
         pd.testing.assert_frame_equal(
             api_schedule,
             local_schedule,
