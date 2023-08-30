@@ -91,7 +91,7 @@ class WinterAPI:
         backoff.expo, requests.exceptions.RequestException, max_time=MAX_TIMEOUT
     )
     def post(
-        self, url, data: BaseModel | list[BaseModel], auth=None, **kwargs
+        self, url, data: AllTooClasses | list[AllTooClasses], auth=None, **kwargs
     ) -> requests.Response:
         """
         Run a post request.
@@ -106,9 +106,9 @@ class WinterAPI:
             auth = self.get_auth()
 
         if isinstance(data, list):
-            convert = json.dumps([x.dict() for x in data])
+            convert = json.dumps([x.model_dump() for x in data])
         elif isinstance(data, BaseModel):
-            convert = json.dumps(data.dict())
+            convert = json.dumps([data.model_dump()])
         else:
             err = f"Unrecognised data type {type(data)}"
             logger.error(err)
