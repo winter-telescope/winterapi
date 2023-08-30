@@ -30,7 +30,7 @@ class WinterAPICredentials(BaseModel):
 
     user: Optional[str] = Field(default=None)
     password: Optional[str] = Field(default=None)
-    programs: Optional[dict[str, Program]] = Field(default={})
+    programs: dict[str, Program] = {}
 
 
 secret_path = Path.home().joinpath(".winterapi.txt")
