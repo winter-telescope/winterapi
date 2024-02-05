@@ -13,14 +13,14 @@ import requests
 from astropy import units as u
 from astropy.time import Time
 from packaging import version
+from wintertoo.data import DEFAULT_IMAGE_TYPE, winter_image_types
 from wintertoo.models import (
-    DEFAULT_IMAGE_TYPE,
     ConeImageQuery,
     ImagePath,
     Program,
     ProgramImageQuery,
     RectangleImageQuery,
-    winter_image_types,
+    TargetImageQuery,
 )
 from wintertoo.models.too import (
     AllTooClasses,
@@ -422,9 +422,9 @@ class WinterAPI(BaseAPI):
         """
         Function to check the dates
 
-        :param start_date:
-        :param end_date:
-        :return:
+        :param start_date: Start date
+        :param end_date: End date
+        :return: Start and end date, in ISO format
         """
         if start_date is None:
             start_date = get_date(Time.now() - 30.0 * u.day)
@@ -439,7 +439,7 @@ class WinterAPI(BaseAPI):
         program_name: str,
         start_date: str | None = None,
         end_date: str | None = None,
-        image_type: winter_image_types = "science",
+        image_type: winter_image_types = DEFAULT_IMAGE_TYPE,
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
@@ -462,6 +462,45 @@ class WinterAPI(BaseAPI):
 
         query = ProgramImageQuery(
             program_name=program_name,
+            start_date=start_date,
+            end_date=end_date,
+            kind=image_type,
+        )
+
+        return self.query_images(query=query)
+
+    def query_images_by_target_name(
+        self,
+        program_name: str,
+        target_name: str | None,
+        start_date: str | None = None,
+        end_date: str | None = None,
+        image_type: winter_image_types = DEFAULT_IMAGE_TYPE,
+    ) -> tuple[requests.Response, pd.DataFrame]:
+        """
+        Function to get the observatory queue
+
+        :param program_name: Name of the program under which to check ToOs
+        :param target_name: Name of the target
+        :param start_date: Start date for images
+        :param end_date: End date for images
+        :param image_type: Type of image to query
+        :return: API response and TOO schedule
+        """
+
+        start_date, end_date = self.check_query_dates(
+            start_date=start_date, end_date=end_date
+        )
+
+        print(
+            f"Querying images for {program_name} between "
+            f"{start_date} and {end_date} of type '{image_type}', "
+            f"with name {target_name}"
+        )
+
+        query = TargetImageQuery(
+            program_name=program_name,
+            target_name=target_name,
             start_date=start_date,
             end_date=end_date,
             kind=image_type,
