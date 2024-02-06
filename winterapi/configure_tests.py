@@ -1,6 +1,7 @@
 """
 This script is used to configure the environment variables for the tests.
 """
+
 import os
 
 from winterapi import WinterAPI

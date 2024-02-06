@@ -13,7 +13,7 @@ import requests
 from astropy import units as u
 from astropy.time import Time
 from packaging import version
-from wintertoo.data import DEFAULT_IMAGE_TYPE, winter_image_types
+from wintertoo.data import DEFAULT_IMAGE_TYPE, WinterImageTypes
 from wintertoo.models import (
     ConeImageQuery,
     ImagePath,
@@ -393,7 +393,9 @@ class WinterAPI(BaseAPI):
 
     def query_images(
         self,
-        query: ProgramImageQuery | RectangleImageQuery | ConeImageQuery,
+        query: (
+            TargetImageQuery | RectangleImageQuery | ConeImageQuery | ProgramImageQuery
+        ),
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
@@ -439,7 +441,7 @@ class WinterAPI(BaseAPI):
         program_name: str,
         start_date: str | None = None,
         end_date: str | None = None,
-        image_type: winter_image_types = DEFAULT_IMAGE_TYPE,
+        image_type: WinterImageTypes = DEFAULT_IMAGE_TYPE,
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
@@ -475,7 +477,7 @@ class WinterAPI(BaseAPI):
         target_name: str | None,
         start_date: str | None = None,
         end_date: str | None = None,
-        image_type: winter_image_types = DEFAULT_IMAGE_TYPE,
+        image_type: WinterImageTypes = DEFAULT_IMAGE_TYPE,
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
@@ -516,7 +518,7 @@ class WinterAPI(BaseAPI):
         radius_deg: float = 1.0,
         start_date: str | None = None,
         end_date: str | None = None,
-        image_type: winter_image_types = DEFAULT_IMAGE_TYPE,
+        image_type: WinterImageTypes = DEFAULT_IMAGE_TYPE,
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
@@ -562,7 +564,7 @@ class WinterAPI(BaseAPI):
         dec_max_deg: float,
         start_date: str | None = None,
         end_date: str | None = None,
-        image_type: winter_image_types = DEFAULT_IMAGE_TYPE,
+        image_type: WinterImageTypes = DEFAULT_IMAGE_TYPE,
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
@@ -606,7 +608,7 @@ class WinterAPI(BaseAPI):
         self,
         program_name: str,
         paths: list[str] | str,
-        image_type: winter_image_types,
+        image_type: WinterImageTypes,
         output_dir: str | None | Path = None,
     ) -> tuple[requests.Response, Path]:
         """

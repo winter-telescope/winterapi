@@ -1,6 +1,7 @@
 """
 Fidelius is the keeper of secrets. It is the class that handles the secrets.
 """
+
 import logging
 
 import numpy as np
