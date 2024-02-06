@@ -53,7 +53,7 @@ from winterapi.fidelius import Fidelius
 logger = logging.getLogger(__name__)
 
 
-class WinterAPI(BaseAPI):
+class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
     """
     Class to communicate with the Winter API
     """
@@ -471,7 +471,7 @@ class WinterAPI(BaseAPI):
 
         return self.query_images(query=query)
 
-    def query_images_by_target_name(
+    def query_images_by_target_name(  # pylint: disable=too-many-arguments
         self,
         program_name: str,
         target_name: str | None,
@@ -510,7 +510,7 @@ class WinterAPI(BaseAPI):
 
         return self.query_images(query=query)
 
-    def query_images_by_cone(
+    def query_images_by_cone(  # pylint: disable=too-many-arguments
         self,
         program_name: str,
         ra_deg: float,
@@ -555,7 +555,7 @@ class WinterAPI(BaseAPI):
 
         return self.query_images(query=query)
 
-    def query_images_by_rectangle(
+    def query_images_by_rectangle(  # pylint: disable=too-many-arguments
         self,
         program_name: str,
         ra_min_deg: float,
