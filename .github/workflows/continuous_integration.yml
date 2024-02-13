@@ -55,6 +55,7 @@ jobs:
         run: coverage run -m unittest discover tests
 
       - name: Run Coveralls
+        continue-on-error: true
         if: ${{ success() }}
         run: |
           coveralls --service=github
