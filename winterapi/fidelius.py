@@ -133,7 +133,7 @@ class Fidelius:
 
         :return: List of programs.
         """
-        return list(self.credentials.programs)
+        return sorted(list(self.credentials.programs))
 
     def get_all_program_details(self) -> dict[str, Program]:
         """
