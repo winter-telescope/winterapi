@@ -44,6 +44,7 @@ class TestSchedule(unittest.TestCase):
             start_time_mjd=62721.1894969287,
             end_time_mjd=62722.1894969452,
             target_name="test_field",
+            total_exposure_time=300.0,
         )
 
         too_radec = WinterRaDecToO(
@@ -53,6 +54,7 @@ class TestSchedule(unittest.TestCase):
             end_time_mjd=62722.1894969452,
             use_field_grid=False,
             target_name="test_radec",
+            total_exposure_time=300.0,
         )
 
         too_list = [too_field, too_radec]
