@@ -44,3 +44,20 @@ git pull
 pip install --editable ".[dev]"
 pre-commit install
 ```
+
+## Using winterapi
+
+You can find example usage under `notebooks/` directory in this repository.
+The notebooks are numbered, and walk you through setting up credentials,
+triggering a ToO, checking on the status of a ToO, and downloading images after
+observations are complete.
+
+## Problems?
+
+The first port of call if you have any problems is to download the latest
+version of the package. You might even get a warning when using the package that your
+version is out of date. If you are still having problems after updating, 
+you could also try re-entering your credentials. 
+
+If you are still having problems, please open a Github Issue and we will
+try to help you as soon as possible.
