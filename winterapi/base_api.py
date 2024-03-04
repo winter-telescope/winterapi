@@ -138,9 +138,9 @@ class BaseAPI:
             raise ValueError(err)
         return res
 
-    # @backoff.on_exception(
-    #     backoff.expo, requests.exceptions.RequestException, max_time=MAX_TIMEOUT*4
-    # )
+    @backoff.on_exception(
+        backoff.expo, requests.exceptions.RequestException, max_time=MAX_TIMEOUT * 4
+    )
     def get_stream(
         self, url, output_dir: str | Path | None = None, auth=None, data=None, **kwargs
     ) -> tuple[requests.Response, Path]:
