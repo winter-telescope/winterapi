@@ -139,7 +139,7 @@ class BaseAPI:
         return res
 
     @backoff.on_exception(
-        backoff.expo, requests.exceptions.RequestException, max_time=MAX_TIMEOUT
+        backoff.expo, requests.exceptions.RequestException, max_time=MAX_TIMEOUT * 4
     )
     def get_stream(
         self, url, output_dir: str | Path | None = None, auth=None, data=None, **kwargs
@@ -178,7 +178,7 @@ class BaseAPI:
                 data=data,
                 auth=auth,
                 params=kwargs,
-                timeout=MAX_TIMEOUT,
+                timeout=4.0 * MAX_TIMEOUT,
                 stream=True,
             ) as resp:
                 header = resp.headers
