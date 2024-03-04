@@ -632,7 +632,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
             program_name=program_name,
             program_api_key=program.prog_key,
             data=[ImagePath(path=x) for x in paths],
-            kind=image_type,
+            image_type=image_type,
         )
 
         return res, output_path
