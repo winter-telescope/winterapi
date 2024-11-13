@@ -628,7 +628,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
 
         res, output_path = self.get_stream(
             DOWNLOAD_LIST_URL,
-            savepath=output_dir,
+            output_dir=output_dir,
             program_name=program_name,
             program_api_key=program.prog_key,
             data=[ImagePath(path=x) for x in paths],
