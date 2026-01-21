@@ -30,6 +30,8 @@ from wintertoo.models.too import (
     Winter,
     WinterFieldToO,
     WinterRaDecToO,
+    Spring,
+    SpringRaDecToO,
 )
 from wintertoo.schedule import concat_toos
 from wintertoo.utils import get_date
@@ -43,6 +45,7 @@ from winterapi.endpoints import (
     SCHEDULE_DELETE_URL,
     SCHEDULE_DETAILS_URL,
     SCHEDULE_SUMMARY_URL,
+    SPRING_TOO_URL,
     SUMMER_TOO_URL,
     USER_URL,
     VERSION_URL,
@@ -282,6 +285,31 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
             submit_trigger=submit_trigger,
         )
 
+    def submit_too_spring(
+        self,
+        program_name: str,
+        data: list[SpringRaDecToO] | SpringRaDecToO,
+        submit_trigger: bool = False,
+    ) -> tuple[requests.Response, pd.DataFrame]:
+        """
+        Function to submit TOO requests for SPRING
+
+        :param program_name: Name of the program under which to submit the TOO
+        :param data: List of SPRING TOO requests
+        :param submit_trigger: boolean whether to really submit the TOO
+        :return: API response and TOO schedule
+        """
+        if not isinstance(data, list):
+            data = [data]
+        for entry in data:
+            assert isinstance(entry, Spring), f"Entry {entry} is not a Spring ToO"
+        return self._submit_too(
+            program_name=program_name,
+            url=SPRING_TOO_URL,
+            data=data,
+            submit_trigger=submit_trigger,
+        )
+
     def submit_too_summer(
         self,
         program_name: str,
@@ -323,11 +351,15 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
     def get_observatory_queue(
         self,
         program_name: str,
+        include_archived: bool = False,
+        target_name: Optional[str] = None,
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
 
         :param program_name: Name of the program under which to check ToOs
+        :param include_archived: Whether to include archived schedules`
+        :param target_name: Name of the target to filter by
         :return: API response and TOO schedule
         """
 
@@ -337,9 +369,15 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
             SCHEDULE_SUMMARY_URL,
             program_name=program_name,
             program_api_key=program.prog_key,
+            include_archived=include_archived,
         )
 
         observatory_queue = pd.DataFrame(res.json()["body"])
+
+        if target_name is not None:
+            mask = [target_name in x for x in observatory_queue["target_names"]]
+            observatory_queue = observatory_queue[mask]
+
         return res, observatory_queue
 
     def get_too_details(
