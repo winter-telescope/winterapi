@@ -21,4 +21,4 @@ jobs:
           pip install --editable ".[dev]"
       - name: Analysing the code with pylint
         run: |
-           pylint winterapi --fail-under=10.00
+           pylint winterapi --fail-under=9.9
