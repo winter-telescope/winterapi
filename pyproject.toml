@@ -36,7 +36,7 @@ dependencies = [
     "jupyter",
     "backoff",
     "pydantic",
-    "wintertoo>=1.9.0",
+    "wintertoo>=1.9.1",
     "python-dotenv"
 ]
 [project.optional-dependencies]
