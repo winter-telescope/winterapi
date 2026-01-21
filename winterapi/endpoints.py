@@ -3,6 +3,7 @@ Module for storing the endpoints for the API.
 """
 
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()

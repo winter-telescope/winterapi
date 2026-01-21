@@ -24,14 +24,14 @@ from wintertoo.models import (
 )
 from wintertoo.models.too import (
     AllTooClasses,
+    Spring,
+    SpringRaDecToO,
     Summer,
     SummerFieldToO,
     SummerRaDecToO,
     Winter,
     WinterFieldToO,
     WinterRaDecToO,
-    Spring,
-    SpringRaDecToO,
 )
 from wintertoo.schedule import concat_toos
 from wintertoo.utils import get_date
