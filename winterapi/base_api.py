@@ -41,13 +41,17 @@ class BaseAPI:
         if isinstance(data, list):
             convert = json.dumps(
                 [
-                    x.model_dump(exclude=set(x.model_computed_fields.keys()))
+                    x.model_dump(exclude=set(x.__class__.model_computed_fields.keys()))
                     for x in data
                 ]
             )
         elif isinstance(data, BaseModel):
             convert = json.dumps(
-                [data.model_dump(exclude=set(data.model_computed_fields.keys()))]
+                [
+                    data.model_dump(
+                        exclude=set(data.__class__.model_computed_fields.keys())
+                    )
+                ]
             )
         else:
             err = f"Unrecognised data type {type(data)}"
