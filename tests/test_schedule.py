@@ -7,10 +7,9 @@ import os
 import unittest
 
 import pandas as pd
+from configure_tests import TEST_PROGRAM_NAME, pause_for_rate_limit, winter
 from wintertoo.fields import get_best_field
 from wintertoo.models import WinterFieldToO, WinterRaDecToO
-
-from winterapi.configure_tests import TEST_PROGRAM_NAME, winter
 
 logger = logging.getLogger(__name__)
 
@@ -73,6 +72,8 @@ class TestSchedule(unittest.TestCase):
         )
 
         assert api_res.status_code == 200, "API call failed"
+
+        pause_for_rate_limit()
 
         api_schedule.reset_index(inplace=True)
         api_schedule.drop(columns=["index"], inplace=True)

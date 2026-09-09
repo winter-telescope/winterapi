@@ -6,7 +6,7 @@ import logging
 import time
 import unittest
 
-from winterapi.configure_tests import winter
+from configure_tests import winter
 
 logger = logging.getLogger(__name__)
 
