@@ -46,10 +46,13 @@ if _image_program_key is not None:
     )
 
 # CI runs this suite across CI_PARALLEL_JOBS parallel matrix jobs (see
-# .github/workflows/continuous_integration.yml), all hitting the same
-# production server at once. Every test that makes an API call should pause
-# afterward, to keep the combined request rate from all jobs low enough to
-# avoid tripping server-side rate limits/timeouts.
+# .github/workflows/continuous_integration.yml): the python-version matrix
+# (3.10, 3.11), all hitting the same production server at once. The push
+# trigger is restricted to main, so a branch with an open PR only runs via
+# pull_request - this matrix is the only source of concurrency to plan for.
+# Every test that makes an API call should pause afterward, to keep the
+# combined request rate from all jobs low enough to avoid tripping
+# server-side rate limits/timeouts.
 CI_PARALLEL_JOBS = 2
 API_CALL_PAUSE_SECONDS = 2 * CI_PARALLEL_JOBS
 

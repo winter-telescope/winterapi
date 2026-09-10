@@ -4,8 +4,13 @@ name: CI
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events
+  # Only run on push to main, so that pushing to a branch with an open PR
+  # doesn't trigger this workflow twice (once via push, once via
+  # pull_request). Pushes to other branches still get CI via pull_request
+  # once a PR is open, or can be run manually via workflow_dispatch.
   push:
+    branches:
+      - main
 
   pull_request:
 
