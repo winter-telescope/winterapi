@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "winterapi"
-version = "1.6.0"
+version = "1.7.0"
 description = ""
 authors = [
     {name = "Robert Stein", email = "rdstein@caltech.edu"}
@@ -93,3 +93,7 @@ extension-pkg-whitelist=["pydantic"]
 
 [tool.pylint.typecheck]
 generated-members=["u.*"]
+
+[tool.pylint.design]
+max-args = 7
+max-positional-arguments = 7

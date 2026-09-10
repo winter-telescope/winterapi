@@ -6,7 +6,7 @@ import getpass
 import logging
 from importlib import metadata
 from pathlib import Path
-from typing import Optional
+from typing import Literal, Optional
 
 import pandas as pd
 import requests
@@ -54,6 +54,8 @@ from winterapi.endpoints import (
 from winterapi.fidelius import Fidelius
 
 logger = logging.getLogger(__name__)
+
+Instrument = Literal["winter", "spring"]
 
 
 class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
@@ -434,11 +436,13 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         query: (
             TargetImageQuery | RectangleImageQuery | ConeImageQuery | ProgramImageQuery
         ),
+        instrument: Instrument = "winter",
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
 
         :param query: Query Request
+        :param instrument: Instrument to query images for ("winter" or "spring")
         :return: API response and TOO schedule
         """
 
@@ -449,6 +453,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
             program_name=query.program_name,
             program_api_key=program.prog_key,
             data=[query],
+            instrument=instrument,
         )
 
         image_summary = pd.DataFrame(res.json()["body"])
@@ -480,6 +485,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         start_date: str | None = None,
         end_date: str | None = None,
         image_type: WinterImageTypes = DEFAULT_IMAGE_TYPE,
+        instrument: Instrument = "winter",
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
@@ -488,6 +494,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         :param start_date: Start date for images
         :param end_date: End date for images
         :param image_type: Type of image to query
+        :param instrument: Instrument to query images for ("winter" or "spring")
         :return: API response and TOO schedule
         """
 
@@ -496,7 +503,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         )
 
         print(
-            f"Querying images for {program_name} between "
+            f"Querying {instrument} images for {program_name} between "
             f"{start_date} and {end_date} of type '{image_type}'"
         )
 
@@ -507,15 +514,16 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
             kind=image_type,
         )
 
-        return self.query_images(query=query)
+        return self.query_images(query=query, instrument=instrument)
 
-    def query_images_by_target_name(  # pylint: disable=too-many-arguments
+    def query_images_by_target_name(
         self,
         program_name: str,
         target_name: str | None,
         start_date: str | None = None,
         end_date: str | None = None,
         image_type: WinterImageTypes = DEFAULT_IMAGE_TYPE,
+        instrument: Instrument = "winter",
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
@@ -525,6 +533,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         :param start_date: Start date for images
         :param end_date: End date for images
         :param image_type: Type of image to query
+        :param instrument: Instrument to query images for ("winter" or "spring")
         :return: API response and TOO schedule
         """
 
@@ -533,7 +542,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         )
 
         print(
-            f"Querying images for {program_name} between "
+            f"Querying {instrument} images for {program_name} between "
             f"{start_date} and {end_date} of type '{image_type}', "
             f"with name {target_name}"
         )
@@ -546,9 +555,10 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
             kind=image_type,
         )
 
-        return self.query_images(query=query)
+        return self.query_images(query=query, instrument=instrument)
 
-    def query_images_by_cone(  # pylint: disable=too-many-arguments
+    # pylint: disable-next=too-many-arguments,too-many-positional-arguments
+    def query_images_by_cone(
         self,
         program_name: str,
         ra_deg: float,
@@ -557,6 +567,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         start_date: str | None = None,
         end_date: str | None = None,
         image_type: WinterImageTypes = DEFAULT_IMAGE_TYPE,
+        instrument: Instrument = "winter",
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
@@ -568,6 +579,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         :param start_date: Start date for images
         :param end_date: End date for images
         :param image_type: Type of image to query
+        :param instrument: Instrument to query images for ("winter" or "spring")
         :return: API response and TOO schedule
         """
 
@@ -576,7 +588,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         )
 
         print(
-            f"Querying images for {program_name} between "
+            f"Querying {instrument} images for {program_name} between "
             f"{start_date} and {end_date} of type '{image_type}', "
             f"with a radius of {radius_deg} degrees around {ra_deg}, {dec_deg}"
         )
@@ -591,9 +603,10 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
             kind=image_type,
         )
 
-        return self.query_images(query=query)
+        return self.query_images(query=query, instrument=instrument)
 
-    def query_images_by_rectangle(  # pylint: disable=too-many-arguments
+    # pylint: disable-next=too-many-arguments,too-many-positional-arguments
+    def query_images_by_rectangle(
         self,
         program_name: str,
         ra_min_deg: float,
@@ -603,6 +616,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         start_date: str | None = None,
         end_date: str | None = None,
         image_type: WinterImageTypes = DEFAULT_IMAGE_TYPE,
+        instrument: Instrument = "winter",
     ) -> tuple[requests.Response, pd.DataFrame]:
         """
         Function to get the observatory queue
@@ -615,6 +629,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         :param start_date: Start date for images
         :param end_date: End date for images
         :param image_type: Type of image to query
+        :param instrument: Instrument to query images for ("winter" or "spring")
         :return: API response and TOO schedule
         """
 
@@ -623,7 +638,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         )
 
         print(
-            f"Querying images for {program_name} between "
+            f"Querying {instrument} images for {program_name} between "
             f"{start_date} and {end_date} of type '{image_type}', "
             f"with RA between {ra_min_deg} and {ra_max_deg} and "
             f"Dec between {dec_min_deg} and {dec_max_deg}"
@@ -640,7 +655,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
             kind=image_type,
         )
 
-        return self.query_images(query=query)
+        return self.query_images(query=query, instrument=instrument)
 
     def download_image_list(
         self,
@@ -648,6 +663,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         paths: list[str] | str,
         image_type: WinterImageTypes,
         output_dir: str | None | Path = None,
+        instrument: Instrument = "winter",
     ) -> tuple[requests.Response, Path]:
         """
         Download images as a zip file.
@@ -656,6 +672,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
         :param image_type: Type of image to query
         :param output_dir: Directory to save the zip to
         :param paths: List of paths to download
+        :param instrument: Instrument to download images for ("winter" or "spring")
         :return: API response
         """
 
@@ -671,6 +688,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
             program_api_key=program.prog_key,
             data=[ImagePath(path=x) for x in paths],
             image_type=image_type,
+            instrument=instrument,
         )
 
         return res, output_path

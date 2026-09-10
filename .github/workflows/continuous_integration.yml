@@ -4,8 +4,19 @@ name: CI
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events
+  # Only run on push to main or a tag, so that pushing to a branch with an
+  # open PR doesn't trigger this workflow twice (once via push, once via
+  # pull_request). Pushes to other branches still get CI via pull_request
+  # once a PR is open, or can be run manually via workflow_dispatch.
+  # branches/tags are matched independently (a branch push only checks
+  # branches, a tag push only checks tags), so the release flow of tagging
+  # and pushing after a merge still triggers this workflow and its PyPI
+  # publish step.
   push:
+    branches:
+      - main
+    tags:
+      - "*"
 
   pull_request:
 
@@ -19,10 +30,14 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Specify the python versions to test
+    # Install/import-check on every supported Python version, but only run
+    # the live-API test suite, coverage upload, build, and PyPI publish on
+    # Python 3.11 - running the real test suite (which hits the production
+    # server) on every matrix leg at once is what was tripping server-side
+    # rate limits/timeouts.
     strategy:
       matrix:
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -47,31 +62,35 @@ jobs:
           pip install keyrings.alt
 
       - name: Run tests
+        if: ${{ matrix.python-version == '3.11' }}
         env:
           WINTER_API_USER: ${{ secrets.WINTER_API_USER }}
           WINTER_API_PASSWORD: ${{ secrets.WINTER_API_PASSWORD }}
           WINTER_API_PROGRAM: ${{ secrets.WINTER_API_PROGRAM }}
           WINTER_API_KEY: ${{ secrets.WINTER_API_KEY }}
+          WINTER_API_IMAGE_KEY: ${{ secrets.WINTER_API_IMAGE_KEY }}
         run: coverage run -m unittest discover tests
 
       - name: Run Coveralls
         continue-on-error: true
-        if: ${{ success() }}
+        if: ${{ success() && matrix.python-version == '3.11' }}
         run: |
           coveralls --service=github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Echo tag name
-        run: echo "Tag is ${{ github.ref }}, Tagged is ${{ startsWith(github.ref, 'refs/tags/')}}, Python Check is ${{matrix.python-version == 3.11}},  Deploy is ${{ startsWith(github.ref, 'refs/tags/') && matrix.python-version == 3.11}}"
+        run: echo "Tag is ${{ github.ref }}, Tagged is ${{ startsWith(github.ref, 'refs/tags/')}}, Python Check is ${{matrix.python-version == '3.11'}},  Deploy is ${{ startsWith(github.ref, 'refs/tags/') && matrix.python-version == '3.11' }}"
 
       - name: Install pypa/build
+        if: ${{ matrix.python-version == '3.11' }}
         run: >-
           python -m
           pip install
           build
           --user
       - name: Build a binary wheel and a source tarball
+        if: ${{ matrix.python-version == '3.11' }}
         run: >-
           python -m
           build
@@ -81,7 +100,7 @@ jobs:
           .
 
       - name: Publish distribution 📦 to PyPI
-        if: ${{ startsWith(github.ref, 'refs/tags/') && success() && matrix.python-version == 3.11 && github.event_name == 'push'}}
+        if: ${{ startsWith(github.ref, 'refs/tags/') && success() && matrix.python-version == '3.11' && github.event_name == 'push' }}
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
