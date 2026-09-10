@@ -4,13 +4,19 @@ name: CI
 
 # Controls when the action will run.
 on:
-  # Only run on push to main, so that pushing to a branch with an open PR
-  # doesn't trigger this workflow twice (once via push, once via
+  # Only run on push to main or a tag, so that pushing to a branch with an
+  # open PR doesn't trigger this workflow twice (once via push, once via
   # pull_request). Pushes to other branches still get CI via pull_request
   # once a PR is open, or can be run manually via workflow_dispatch.
+  # branches/tags are matched independently (a branch push only checks
+  # branches, a tag push only checks tags), so the release flow of tagging
+  # and pushing after a merge still triggers this workflow and its PyPI
+  # publish step.
   push:
     branches:
       - main
+    tags:
+      - "*"
 
   pull_request:
 
