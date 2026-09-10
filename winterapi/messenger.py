@@ -516,7 +516,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
 
         return self.query_images(query=query, instrument=instrument)
 
-    def query_images_by_target_name(  # pylint: disable=too-many-arguments
+    def query_images_by_target_name(
         self,
         program_name: str,
         target_name: str | None,
@@ -557,7 +557,8 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
 
         return self.query_images(query=query, instrument=instrument)
 
-    def query_images_by_cone(  # pylint: disable=too-many-arguments
+    # pylint: disable-next=too-many-arguments,too-many-positional-arguments
+    def query_images_by_cone(
         self,
         program_name: str,
         ra_deg: float,
@@ -604,7 +605,8 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
 
         return self.query_images(query=query, instrument=instrument)
 
-    def query_images_by_rectangle(  # pylint: disable=too-many-arguments
+    # pylint: disable-next=too-many-arguments,too-many-positional-arguments
+    def query_images_by_rectangle(
         self,
         program_name: str,
         ra_min_deg: float,
