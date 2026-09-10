@@ -45,22 +45,19 @@ if _image_program_key is not None:
         overwrite=True,
     )
 
-# CI runs this suite across CI_PARALLEL_JOBS parallel matrix jobs (see
-# .github/workflows/continuous_integration.yml): the python-version matrix
-# (3.10, 3.11), all hitting the same production server at once. The push
-# trigger is restricted to main, so a branch with an open PR only runs via
-# pull_request - this matrix is the only source of concurrency to plan for.
-# Every test that makes an API call should pause afterward, to keep the
-# combined request rate from all jobs low enough to avoid tripping
-# server-side rate limits/timeouts.
-CI_PARALLEL_JOBS = 2
-API_CALL_PAUSE_SECONDS = 2 * CI_PARALLEL_JOBS
+# .github/workflows/continuous_integration.yml builds/installs across a
+# matrix of Python versions, but only runs this live-API test suite on one
+# of them (3.11) - so a single CI run no longer hits the server with
+# concurrent requests from parallel matrix jobs. Tests still pause after
+# each API call as a courtesy to the server and a buffer against its own
+# rate limits/timeouts.
+API_CALL_PAUSE_SECONDS = 2
 
 
 def pause_for_rate_limit():
     """
-    Pause after a test API call, to avoid tripping server-side rate limits
-    given CI_PARALLEL_JOBS concurrent CI jobs hitting the server at once.
+    Pause after a test API call, as a courtesy to the server and a buffer
+    against its own rate limits/timeouts.
 
     :return: None
     """
