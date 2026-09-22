@@ -86,3 +86,25 @@ class TestSchedule(unittest.TestCase):
             check_column_type=False,
             check_index_type=False,
         )
+
+    def test_get_observatory_queue_empty_with_target_name(self):
+        """
+        Test that filtering an empty observatory queue by target name
+        doesn't raise, even though an empty queue response has no columns
+        to filter on (regression test for KeyError: 'target_names')
+
+        :return: None
+        """
+        logger.info("Testing get_observatory_queue with an empty queue")
+
+        res, queue = winter.get_observatory_queue(
+            program_name=TEST_PROGRAM_NAME,
+            include_archived=False,
+            target_name="nonexistent_target",
+        )
+
+        assert res.status_code == 200, "API call failed"
+        assert isinstance(queue, pd.DataFrame), "Expected a DataFrame"
+        assert len(queue) == 0, f"Expected an empty queue, found {len(queue)} entries"
+
+        pause_for_rate_limit()

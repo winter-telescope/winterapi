@@ -376,7 +376,7 @@ class WinterAPI(BaseAPI):  # pylint: disable=too-many-public-methods
 
         observatory_queue = pd.DataFrame(res.json()["body"])
 
-        if target_name is not None:
+        if target_name is not None and not observatory_queue.empty:
             mask = [target_name in x for x in observatory_queue["target_names"]]
             observatory_queue = observatory_queue[mask]
 
